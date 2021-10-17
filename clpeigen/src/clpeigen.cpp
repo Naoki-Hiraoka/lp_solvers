@@ -33,14 +33,14 @@ namespace clpeigen{
                             len.data());
 
     // load problem
-    this->model.loadProblem(matrix,
+    this->model_.loadProblem(matrix,
                             lb.data(),
                             ub.data(),
                             o.data(),
                             lbA.data(),
                             ubA.data());
-    this->model.setOptimizationDirection(-1);//maximize
-    this->model.setLogLevel(debuglevel);
+    this->model_.setOptimizationDirection(-1);//maximize
+    this->model_.setLogLevel(debuglevel);
 
     this->initialized = true;
     this->initial_solve = true;
@@ -50,34 +50,34 @@ namespace clpeigen{
   bool solver::solve(){
     // Solve
     if(this->initial_solve){
-      int status = this->model.initialSolve();
+      int status = this->model_.initialSolve();
       this->initial_solve = false;
       return status == 0;
     }else{
       // Solve - primal as primal feasible
-      int status = this->model.primal(1);
+      int status = this->model_.primal(1);
       return status == 0;
     }
   }
 
   bool solver::getSolution(Eigen::VectorXd& solution){
-    solution.resize(this->model.getNumCols());
+    solution.resize(this->model_.getNumCols());
 
     // Solution
-    const double * s = this->model.primalColumnSolution();
-    for (size_t i=0; i < this->model.getNumCols(); i++) solution[i] = s[i];
+    const double * s = this->model_.primalColumnSolution();
+    for (size_t i=0; i < this->model_.getNumCols(); i++) solution[i] = s[i];
 
     return true;
   }
 
   bool solver::updateObjective(const Eigen::VectorXd& o){
-    if(o.rows() != this->model.getNumCols()){
+    if(o.rows() != this->model_.getNumCols()){
       std::cerr << "[clpeigen::solver::updateObjective] dimention mismatch" << std::endl;
       return false;
     }
 
-    double * objective = model.objective();
-    for(size_t i=0;i<this->model.getNumCols();i++) objective[i] = o[i];
+    double * objective = this->model_.objective();
+    for(size_t i=0;i<this->model_.getNumCols();i++) objective[i] = o[i];
 
     return true;
   }

@@ -29,8 +29,11 @@ namespace clpeigen{
     bool updateObjective(const Eigen::VectorXd& o);
 
     bool is_initialized() {return initialized;}
+
+    // for option setting
+    ClpSimplex& model() {return model_;}
   private:
-    ClpSimplex model;
+    ClpSimplex model_;
     bool initial_solve;
     bool initialized;
   };
