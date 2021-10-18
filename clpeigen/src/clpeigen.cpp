@@ -54,8 +54,9 @@ namespace clpeigen{
       this->initial_solve = false;
       return status == 0;
     }else{
-      // Solve - primal as primal feasible
-      int status = this->model_.primal(1);
+      int status = this->model_.initialSolve();
+      //int status = this->model_.primal(1);// 安定しない
+      //int status = this->model_.barrier(); // 安定しない
       return status == 0;
     }
   }
